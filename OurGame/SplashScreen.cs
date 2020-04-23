@@ -1,30 +1,42 @@
-﻿using System;
+﻿/*
+ * В классах SplashScreen и Game - много одинакового кода.
+ * Сначала была сделана попытка создать базовый класс, от которого потом наследовать 
+ * SplashScreen и Game, но из-за того что в Game всё static, применить наслоедование
+ * не удалось. 
+ * Времени на выполнение задание осталось мало, из-за недостатка времени
+ * класс SplashScreen копированием кода. Позже это будет переделано - исключено
+ * копирование кода (может быть). 
+ * 
+ */
+
+using System;
 using System.Windows.Forms;
 using System.Drawing;
 
 namespace OurGame
 {
     /// <summary>
-    /// состояние программы - игра (режим игры)
+    /// состояние программы - заставка оно же главное меню 
     /// </summary>
-    static class Game
+    static class SplashScreen
     {
         private static BufferedGraphicsContext _context;
         public static BufferedGraphics _buffer;
-
+        private static MainGameForm _form;
+        private static Color _formColor;
         // размеры игрового поля
         public static int Width { get; set; }
-        public static int Heigth { get; set; }
+        static public int Heigth { get; set; }
+        // как правильно, сначала public или сначала static писать?
 
         private static BaseObject[] _objs;
-        private static Timer _timer;
+        static private  Timer _timer = null;
 
         private static bool _enabled = false;
 
-
-        static Game()
+        static SplashScreen()
         {
-
+           
         }
 
         public static void Init(Form form)
@@ -35,7 +47,9 @@ namespace OurGame
             Width = form.ClientSize.Width;
             Heigth = form.ClientSize.Height;
             _buffer = _context.Allocate(g, new Rectangle(0, 0, Width, Heigth));
-            Load();
+            _form = form as MainGameForm;
+            _formColor = _form.GetColor();
+            Load();            
         }
 
         public static void On()
@@ -51,6 +65,7 @@ namespace OurGame
             }
             _timer.Start();
             _enabled = true;
+            _form?.SetSplashScreenUIVisibility(true);
         }
 
         public static void Off()
@@ -60,13 +75,12 @@ namespace OurGame
                 _timer?.Stop();
                 _enabled = false;
             }
+            _form?.SetSplashScreenUIVisibility(false);
         }
 
         public static void Draw()
         {
-            _buffer.Graphics.Clear(Color.Black);
-            //_buffer.Graphics.DrawRectangle(Pens.White, new Rectangle(100, 100, 200, 200));
-            //_buffer.Graphics.FillEllipse(Brushes.Wheat, new Rectangle(100, 50, 200, 125));
+            _buffer.Graphics.Clear(_formColor);
 
             foreach (BaseObject obj in _objs)
             {
@@ -87,17 +101,9 @@ namespace OurGame
 
         private static void Load()
         {
-            _objs = new BaseObject[30];
-            for (int i = 0; i < _objs.Length / 2; i++)
-            {
-                _objs[i] = new Asteroid(new Point(600, i * 20), new Point(15 - i, 15 - i), 
-                                            new Size(20, 20));
-            }
-            for (int i = _objs.Length / 2; i < _objs.Length; i++)
-            {
-                _objs[i] = new Star(new Point(600, i * 20), new Point(-i, 0),
-                                            new Size(5, 5));
-            }
+            _objs = new BaseObject[2];  
+            _objs[0] = new Brain(new Point(200, 450), new Point(-10, 14), new Size(38, 42));
+            _objs[1] = new Brain(new Point(400, 300), new Point(8, 16), new Size(38, 42));
         }
 
         private static void Timer_Tick(object sender, EventArgs e)

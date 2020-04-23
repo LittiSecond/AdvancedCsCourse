@@ -20,10 +20,39 @@ namespace OurGame
             Form form = new MainGameForm();
             form.Width = 800;
             form.Height = 600;
-            Game.Init(form);
+            SplashScreen.Init(form);
+            Game.Init(form);            
             form.Show();
-            Game.Draw();
+            Game.Off();
+            SplashScreen.On();
+            SplashScreen.Draw();
             Application.Run(form);
         }
+
+        static public void NewGame()
+        {
+            SplashScreen.Off();
+            Game.On();
+            Game.Draw();
+        }
+
+        static public void Records()
+        {
+
+        }
+
+        static public void ExitProgramm()
+        {
+            Application.Exit();
+        }
+
+        static public void EndGame()
+        {
+            Game.Off();
+            SplashScreen.On();
+            SplashScreen.Draw();
+        }
+
+
     }
 }
