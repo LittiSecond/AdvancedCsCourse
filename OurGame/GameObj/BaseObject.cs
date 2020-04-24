@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace OurGame
 {
-    class BaseObject
+    abstract class BaseObject : ICollision
     {
 
         protected Point _pos;
@@ -17,21 +17,26 @@ namespace OurGame
             _size = size;
         }
 
-        public virtual void Draw()
-        {
-            Game.Buffer.Graphics.DrawEllipse(Pens.White, _pos.X, _pos.Y,
-                _size.Width, _size.Height);
-        }
+        public abstract void Draw();
 
         public virtual void Update()
         {
+            //_pos.X = _pos.X + _dir.X;
+            //_pos.Y = _pos.Y + _dir.Y;
+            //if (_pos.X < 0) _dir.X = Math.Abs(_dir.X);
+            //if (_pos.X + _size.Width > Game.Width) _dir.X = -Math.Abs(_dir.X);
+            //if (_pos.Y < 0) _dir.Y = Math.Abs(_dir.Y);
+            //if (_pos.Y + _size.Height > Game.Heigth) _dir.Y = -Math.Abs(_dir.Y);
             _pos.X = _pos.X + _dir.X;
-            _pos.Y = _pos.Y + _dir.Y;
-            if (_pos.X < 0) _dir.X = Math.Abs(_dir.X);
-            if (_pos.X + _size.Width > Game.Width) _dir.X = -Math.Abs(_dir.X);
-            if (_pos.Y < 0) _dir.Y = Math.Abs(_dir.Y);
-            if (_pos.Y + _size.Height > Game.Heigth) _dir.Y = -Math.Abs(_dir.Y);
+            if (_pos.X < 0)
+            {
+                _pos.X = Game.Width + _size.Width;
+            }
         }
+
+        public Rectangle Rect => new Rectangle(_pos, _size);
+
+        public bool Collision(ICollision o) => this.Rect.IntersectsWith(o.Rect);
 
     }
 }

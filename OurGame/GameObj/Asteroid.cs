@@ -70,7 +70,7 @@ namespace OurGame
                 OurGame.Properties.Resources.a2,
                 OurGame.Properties.Resources.a3,
                 OurGame.Properties.Resources.a4,
-                OurGame.Properties.Resources.a5,
+                OurGame.Properties.Resources.a5
             };
 
 

@@ -17,9 +17,13 @@ namespace OurGame
             //Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
 
-            Form form = new MainGameForm();
-            form.Width = 800;
-            form.Height = 600;
+            Form form = new MainGameForm
+            {
+                Width = Screen.PrimaryScreen.Bounds.Width,
+                Height = Screen.PrimaryScreen.Bounds.Height,
+            };
+            //form.Width = 1422;
+            //form.Height = 800;
             SplashScreen.Init(form);
             Game.Init(form);            
             form.Show();
