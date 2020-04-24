@@ -23,7 +23,7 @@ namespace OurGame
         public override void Draw()
         {
             if (_image == null) return;
-            Game._buffer.Graphics.DrawImage(_image, new Rectangle(_pos, _size));
+            Game.Buffer.Graphics.DrawImage(_image, new Rectangle(_pos, _size));
         }
         
         /*       
@@ -64,12 +64,16 @@ namespace OurGame
 
         private static void LoadImages()
         {
-            _images = new Image[5];
-            _images[0] = OurGame.Properties.Resources.a1;
-            _images[1] = OurGame.Properties.Resources.a2;
-            _images[2] = OurGame.Properties.Resources.a3;
-            _images[3] = OurGame.Properties.Resources.a4;
-            _images[4] = OurGame.Properties.Resources.a5;
+            _images = new Image[] 
+            {
+                OurGame.Properties.Resources.a1,
+                OurGame.Properties.Resources.a2,
+                OurGame.Properties.Resources.a3,
+                OurGame.Properties.Resources.a4,
+                OurGame.Properties.Resources.a5,
+            };
+
+
         }
 
     }

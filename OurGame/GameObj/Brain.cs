@@ -17,12 +17,12 @@ namespace OurGame
             _image = OurGame.Properties.Resources.gb1;
             _speedX = Math.Abs(dir.X);
             _speedY = Math.Abs(dir.Y);
-            _dorawRect = SplashScreen._buffer.Graphics.VisibleClipBounds; // получаю размеры области рисования
+            _dorawRect = SplashScreen.Buffer.Graphics.VisibleClipBounds; // получаю размеры области рисования
         }
 
         public override void Draw()
         {
-            SplashScreen._buffer.Graphics.DrawImage(_image, new Rectangle(_pos, _size));
+            SplashScreen.Buffer.Graphics.DrawImage(_image, new Rectangle(_pos, _size));
 
         }
 

@@ -21,7 +21,7 @@ namespace OurGame
     static class SplashScreen
     {
         private static BufferedGraphicsContext _context;
-        public static BufferedGraphics _buffer;
+        private static BufferedGraphics _buffer;
         private static MainGameForm _form;
         private static Color _formColor;
         // размеры игрового поля
@@ -34,9 +34,9 @@ namespace OurGame
 
         private static bool _enabled = false;
 
-        static SplashScreen()
+        public static BufferedGraphics Buffer
         {
-           
+            get { return _buffer; }
         }
 
         public static void Init(Form form)
@@ -91,7 +91,7 @@ namespace OurGame
 
         }
 
-        private static void Updatu()
+        private static void Update()
         {
             foreach (BaseObject obj in _objs)
             {
@@ -109,7 +109,7 @@ namespace OurGame
         private static void Timer_Tick(object sender, EventArgs e)
         {
             Draw();
-            Updatu();
+            Update();
         }
 
     }

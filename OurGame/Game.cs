@@ -10,7 +10,7 @@ namespace OurGame
     static class Game
     {
         private static BufferedGraphicsContext _context;
-        public static BufferedGraphics _buffer;
+        private static BufferedGraphics _buffer;
 
         // размеры игрового поля
         public static int Width { get; set; }
@@ -21,10 +21,9 @@ namespace OurGame
 
         private static bool _enabled = false;
 
-
-        static Game()
+        public static  BufferedGraphics Buffer
         {
-
+            get { return _buffer; }
         }
 
         public static void Init(Form form)
@@ -77,7 +76,7 @@ namespace OurGame
 
         }
 
-        private static void Updatu()
+        private static void Update()
         {
             foreach (BaseObject obj in _objs)
             {
@@ -103,7 +102,7 @@ namespace OurGame
         private static void Timer_Tick(object sender, EventArgs e)
         {
             Draw();
-            Updatu();
+            Update();
         }
 
     }

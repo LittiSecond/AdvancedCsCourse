@@ -19,7 +19,7 @@ namespace OurGame
 
         public virtual void Draw()
         {
-            Game._buffer.Graphics.DrawEllipse(Pens.White, _pos.X, _pos.Y,
+            Game.Buffer.Graphics.DrawEllipse(Pens.White, _pos.X, _pos.Y,
                 _size.Width, _size.Height);
         }
 

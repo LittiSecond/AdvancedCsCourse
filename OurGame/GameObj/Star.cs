@@ -14,9 +14,9 @@ namespace OurGame
 
         public override void Draw()
         {
-            Game._buffer.Graphics.DrawLine(Pens.White, _pos.X, _pos.Y,
+            Game.Buffer.Graphics.DrawLine(Pens.White, _pos.X, _pos.Y,
                 _pos.X + _size.Width, _pos.Y + _size.Height);
-            Game._buffer.Graphics.DrawLine(Pens.White, _pos.X + _size.Width, _pos.Y,
+            Game.Buffer.Graphics.DrawLine(Pens.White, _pos.X + _size.Width, _pos.Y,
                 _pos.X , _pos.Y + _size.Height);
         }
 
