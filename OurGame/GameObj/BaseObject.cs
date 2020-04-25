@@ -5,6 +5,7 @@ namespace OurGame
 {
     abstract class BaseObject : ICollision
     {
+        private const int MAX_SPEED = 100;
 
         protected Point _pos;
         protected Point _dir;
@@ -13,26 +14,20 @@ namespace OurGame
         public BaseObject(Point pos, Point dir, Size size)
         {
             _pos = pos;
+
+            int speed = Math.Max(Math.Abs(dir.X), Math.Abs(dir.Y));
+
+            if (speed > MAX_SPEED)
+                throw new GameObjectException("Слишком большая скорость объекта " + this.ToString());
             _dir = dir;
+            if (size.Width < 0 || size.Height < 0)
+                throw new GameObjectException("Недопустимый размер объекта " + this.ToString());
             _size = size;
         }
 
         public abstract void Draw();
 
-        public virtual void Update()
-        {
-            //_pos.X = _pos.X + _dir.X;
-            //_pos.Y = _pos.Y + _dir.Y;
-            //if (_pos.X < 0) _dir.X = Math.Abs(_dir.X);
-            //if (_pos.X + _size.Width > Game.Width) _dir.X = -Math.Abs(_dir.X);
-            //if (_pos.Y < 0) _dir.Y = Math.Abs(_dir.Y);
-            //if (_pos.Y + _size.Height > Game.Heigth) _dir.Y = -Math.Abs(_dir.Y);
-            _pos.X = _pos.X + _dir.X;
-            if (_pos.X < 0)
-            {
-                _pos.X = Game.Width + _size.Width;
-            }
-        }
+        public abstract void Update();
 
         public Rectangle Rect => new Rectangle(_pos, _size);
 

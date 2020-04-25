@@ -26,13 +26,18 @@ namespace OurGame
             Game.Buffer.Graphics.DrawImage(_image, new Rectangle(_pos, _size));
         }
         
-        /*       
+               
         public override void Update()
         {
             _pos.X = _pos.X + _dir.X;
             if (_pos.X < 0) _pos.X = Game.Width;
         }
-        */
+        
+        /// <summary> астеройд получил урон </summary>
+        public void Damaged()
+        {
+            _pos.X = Game.Width;      // по заданию 3
+        }
 
             // задумался, а не создать ли класс - менеджер ресурсов, чтобы 
             // все классы, кому нужны картинки, обращались за ними к менеджеру?

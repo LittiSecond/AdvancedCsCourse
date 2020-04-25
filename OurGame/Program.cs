@@ -19,17 +19,28 @@ namespace OurGame
 
             Form form = new MainGameForm
             {
-                Width = Screen.PrimaryScreen.Bounds.Width,
-                Height = Screen.PrimaryScreen.Bounds.Height,
+                // Width = Screen.PrimaryScreen.Bounds.Width,
+                // Height = Screen.PrimaryScreen.Bounds.Height,
+                Width = 998,
+                Height = 800,
             };
-            //form.Width = 1422;
-            //form.Height = 800;
-            SplashScreen.Init(form);
-            Game.Init(form);            
-            form.Show();
-            Game.Off();
-            SplashScreen.On();
-            SplashScreen.Draw();
+
+            try
+            {
+
+                SplashScreen.Init(form);
+                Game.Init(form);
+                form.Show();
+                Game.Off();
+                SplashScreen.On();
+                SplashScreen.Draw();
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                string mess = "Получено исключение ArgumentOutOfRangeException: " + e.Message;
+                MessageBox.Show(mess);
+            }
+
             Application.Run(form);
         }
 
