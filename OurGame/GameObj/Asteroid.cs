@@ -10,12 +10,12 @@ namespace OurGame
         private static Image[] _images = null;
         private static int _nextImageIndex;
 
-        public Asteroid(Point pos, Point dir, Size size) : base(pos, dir, size)
+        public Asteroid(Graphics g, Point pos, Point dir, Size size) : base(g, pos, dir, size)
         {
             _image = GetImage();
         }
 
-        public Asteroid(Point pos, Point dir, Size size, Image image) : base(pos, dir, size)
+        public Asteroid(Graphics g, Point pos, Point dir, Size size, Image image) : base(g, pos, dir, size)
         {
             _image = image;
         }
@@ -23,20 +23,20 @@ namespace OurGame
         public override void Draw()
         {
             if (_image == null) return;
-            Game.Buffer.Graphics.DrawImage(_image, new Rectangle(_pos, _size));
+            _graphics?.DrawImage(_image, new Rectangle(_pos, _size));
         }
         
                
         public override void Update()
         {
             _pos.X = _pos.X + _dir.X;
-            if (_pos.X < 0) _pos.X = Game.Width;
+            if (_pos.X < 0) _pos.X = GraphicHandler.Width;
         }
         
         /// <summary> астеройд получил урон </summary>
         public void Damaged()
         {
-            _pos.X = Game.Width;      // по заданию 3
+            _pos.X = GraphicHandler.Width;      // по заданию 3
         }
 
             // задумался, а не создать ли класс - менеджер ресурсов, чтобы 

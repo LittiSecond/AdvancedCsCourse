@@ -5,14 +5,18 @@ namespace OurGame
 {
     abstract class BaseObject : ICollision
     {
+        protected Graphics _graphics;
+
+
         private const int MAX_SPEED = 100;
 
         protected Point _pos;
         protected Point _dir;
         protected Size _size;
 
-        public BaseObject(Point pos, Point dir, Size size)
+        public BaseObject(Graphics g, Point pos, Point dir, Size size)
         {
+            _graphics = g;
             _pos = pos;
 
             int speed = Math.Max(Math.Abs(dir.X), Math.Abs(dir.Y));

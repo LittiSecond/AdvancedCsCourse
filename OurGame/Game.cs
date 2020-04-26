@@ -1,181 +1,101 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Linq;
-
-// :(
-//#define BULLETS_QUANTITY 30    
 
 namespace OurGame
 {
     /// <summary>
-    /// состояние программы - игра (режим игры)
+    /// поведение программы во время игры (режим игры)
     /// </summary>
-    static class Game
+    class Game : BaseBehaviour
     {
-        private const int MIN_SIZE = 0;
-        private const int MAX_SIZE = 1000;
+        private static int STARS_QUANTITY = 30;
+        private static int ASTEROIDS_QUANTITY = 20;
 
-        private static BufferedGraphicsContext _context;
-        private static BufferedGraphics _buffer;
+        private static Color _bgColor = Color.Black;
 
-        // размеры игрового поля
-        private static int _width;
-        private static int _height; 
+        private Bullet _bullet;
+        private List<Asteroid> _asteroids;
+               
+        //private  bool _dataError = false;
 
-        static public int Width          // выброс исключений по заданию 4 
+        public Game()
         {
-            get { return _width; }
-            set
-            {
-                if (value <= MIN_SIZE || value > MAX_SIZE)
-                    throw new ArgumentOutOfRangeException("Width", "Недопустимая ширина области рисования.");
-                _width = value;
-            }
+            _asteroids = new List<Asteroid>();
         }
 
-        static public int Height
+        public void Init()
         {
-            get { return _height; }
-            set
-            {
-                if (value <= MIN_SIZE || value > MAX_SIZE)
-                    throw new ArgumentOutOfRangeException("Height", "Недопустимая высота области рисования.");
-                _height = value;
-            }
-        }
-        
-        private static BaseObject[] _objs;
-        private static Bullet _bullet;
-        private static Asteroid[] _asteroids;
-
-        private static Timer _timer;
-
-        private static bool _enabled = false;
-        private static bool _dataError = false;
-
-        public static  BufferedGraphics Buffer
-        {
-            get { return _buffer; }
-        }
-
-        public static void Init(Form form)
-        {
-            Graphics g;
-            _context = BufferedGraphicsManager.Current;
-            g = form.CreateGraphics();
-            Width = form.ClientSize.Width;
-            Height = form.ClientSize.Height;
-            _buffer = _context.Allocate(g, new Rectangle(0, 0, _width, _height));
-            _dataError = false;
             Load();
         }
 
-        public static void On()
+        public override void On()
         {
-            if (_enabled) return;
-            if (_timer == null)
-            {
-                //_timer = new Timer { Interval = 100 };
-
-                _timer = new Timer();
-                _timer.Interval = 100;
-                _timer.Tick += Timer_Tick;
-            }
-            _timer.Start();
-            _enabled = true;
+            base.On();
+            GraphicHandler.BackgroundColor = _bgColor;
         }
 
-        public static void Off()
+        public override void Update()
         {
-            if (_enabled)
-            {
-                _timer?.Stop();
-                _enabled = false;
-            }
-        }
+            if (!_enabled) return;
+            base.Update();
 
-        public static void Draw()
-        {
-            _buffer.Graphics.Clear(Color.Black);
-            //_buffer.Graphics.DrawRectangle(Pens.White, new Rectangle(100, 100, 200, 200));
-            //_buffer.Graphics.FillEllipse(Brushes.Wheat, new Rectangle(100, 50, 200, 125));
-
-            foreach (BaseObject obj in _objs)
-            {
-                obj?.Draw();
-            }
-            foreach (Asteroid a in _asteroids)
-            {
-                a?.Draw();
-            }
-            _bullet.Draw();
-
-            _buffer.Render();
-
-        }
-
-        private static void Update()
-        {
-            foreach (BaseObject obj in _objs)
-            {
-                obj?.Update();
-            }
+            // обнаружение коллизий
             foreach (Asteroid a in _asteroids)
             {
                 if (a == null) continue;
-                a.Update();
+                
                 if (a.Collision(_bullet))
                 {
                     System.Media.SystemSounds.Hand.Play();
 
-                    _bullet.Hitting();  // по заданию 3
-                    a.Damaged();        // по заданию 3
+                    _bullet.Hitting();  
+                    a.Damaged();
                 }
             }
-            _bullet.Update();
+
         }
 
-        private static void Load()
+        private void Load()
         {
-            // в задании нет задачи использовать List<> вместо массива
-            _objs = new BaseObject[30];
-            _asteroids = new Asteroid[20];
-
+            Graphics g = GraphicHandler.Graphics;
+            int height = GraphicHandler.Height;
             try
             {
-                _bullet = new Bullet(new Point(0, 200), new Point(5, 0), new Size(4, 1));
+                _bullet = new Bullet(g, new Point(0, 200), new Point(5, 0), new Size(4, 1));
+                _objectsFullList.Add(_bullet);
+
                 Random rnd = new Random();
 
-                for (int i = 0; i < _objs.Length; i++)
+                for (int i = 0; i < STARS_QUANTITY; i++)
                 {
                     int r = rnd.Next(5, 50);
-                    _objs[i] = new Star(new Point(1000, rnd.Next(0, _height)),
-                        new Point(-r, r), new Size(3, 3));
+                    _objectsFullList.Add(new Star(g, new Point(1000, rnd.Next(0, height)),
+                        new Point(-r, r), new Size(3, 3)));
                 }
-                for (int i = 0; i < _asteroids.Length - 1; i++)
+
+                for (int i = 0; i < ASTEROIDS_QUANTITY - 1; i++)
                 {
                     int r = rnd.Next(5, 50);
-                    _asteroids[i] = new Asteroid(new Point(1000, rnd.Next(0, _height - r)),
+                    Asteroid a = new Asteroid(g, new Point(1000, rnd.Next(0, height - r)),
                         new Point(-i, 0), new Size(r, r));
+                    _asteroids.Add(a);
+                    _objectsFullList.Add(a);
                 }
-                // чтобы гарантированно один астеройд был на линии пули - для проверки работы по заданию 3
-                _asteroids[_asteroids.Length - 1] = new Asteroid(new Point(1000, 198),
+
+                // чтобы гарантированно один астеройд был на линии пули
+                Asteroid a2 = new Asteroid(g, new Point(1000, 198),
                         new Point(-10, 0), new Size(20, 20));
+                _asteroids.Add(a2);
+                _objectsFullList.Add(a2);
             }
-            catch (GameObjectException goe)    // перехват исключения по заданию 5
+            catch (GameObjectException goe)
             {
-                _dataError = true;
+                //_dataError = true;
                 MessageBox.Show(goe.Message);
             }
 
-        }
-
-        private static void Timer_Tick(object sender, EventArgs e)
-        {
-            if (_dataError) return;
-            Draw();
-            Update();
         }
 
     }

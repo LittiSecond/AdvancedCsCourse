@@ -6,13 +6,13 @@ namespace OurGame
 {
     class Bullet : BaseObject
     {
-        public Bullet(Point pos, Point dir, Size size) : base(pos, dir, size)
+        public Bullet(Graphics g, Point pos, Point dir, Size size) : base(g, pos, dir, size)
         {
         }
 
         public override void Draw()
         {
-            Game.Buffer.Graphics.DrawRectangle(Pens.OrangeRed, _pos.X, _pos.Y, _size.Width, _size.Height);
+            _graphics?.DrawRectangle(Pens.OrangeRed, _pos.X, _pos.Y, _size.Width, _size.Height);
         }
 
         public override void Update()

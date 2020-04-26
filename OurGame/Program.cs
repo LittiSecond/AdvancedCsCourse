@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace OurGame
 {
     static class Program
     {
+        private static Game _game;
+        private static MainMenu _menu;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -17,7 +17,9 @@ namespace OurGame
             //Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
 
-            Form form = new MainGameForm
+
+
+            MainGameForm form = new MainGameForm
             {
                 // Width = Screen.PrimaryScreen.Bounds.Width,
                 // Height = Screen.PrimaryScreen.Bounds.Height,
@@ -27,13 +29,15 @@ namespace OurGame
 
             try
             {
-
-                SplashScreen.Init(form);
-                Game.Init(form);
+                GraphicHandler.Init(form);
+                _menu = new MainMenu();
+                _menu.Init(form);
+                _game = new Game();
+                _game.Init();
+                _game.Off();
+                _menu.On();
                 form.Show();
-                Game.Off();
-                SplashScreen.On();
-                SplashScreen.Draw();
+                TimeHandler.On(_menu);
             }
             catch (ArgumentOutOfRangeException e)
             {
@@ -46,9 +50,10 @@ namespace OurGame
 
         static public void NewGame()
         {
-            SplashScreen.Off();
-            Game.On();
-            Game.Draw();
+            TimeHandler.Off();
+            _menu.Off();
+            _game.On();
+            TimeHandler.On(_game);
         }
 
         static public void Records()
@@ -63,9 +68,10 @@ namespace OurGame
 
         static public void EndGame()
         {
-            Game.Off();
-            SplashScreen.On();
-            SplashScreen.Draw();
+            TimeHandler.Off();
+            _game.Off();
+            _menu.On();
+            TimeHandler.On(_menu);
         }
 
 
