@@ -11,19 +11,19 @@ namespace OurGame
 
         private RectangleF _dorawRect; 
 
-        public Brain(Point pos, Point dir, Size size)
-            : base(pos, dir, size)
+        public Brain(Graphics g, Point pos, Point dir, Size size)
+            : base(g, pos, dir, size)
         {
             _image = OurGame.Properties.Resources.gb1;
             _speedX = Math.Abs(dir.X);
             _speedY = Math.Abs(dir.Y);
-            _dorawRect = SplashScreen.Buffer.Graphics.VisibleClipBounds; // получаю размеры области рисования
+            if (g != null)   
+            _dorawRect = g.VisibleClipBounds; // получаю размеры области рисования
         }
 
         public override void Draw()
         {
-            SplashScreen.Buffer.Graphics.DrawImage(_image, new Rectangle(_pos, _size));
-
+            _graphics?.DrawImage(_image, new Rectangle(_pos, _size));
         }
 
 

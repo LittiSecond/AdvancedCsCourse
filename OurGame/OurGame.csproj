@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseBehaviour.cs" />
     <Compile Include="GameObjectException.cs" />
     <Compile Include="GameObj\Asteroid.cs" />
     <Compile Include="GameObj\BaseObject.cs" />
@@ -58,11 +59,13 @@
     <Compile Include="Game.cs" />
     <Compile Include="GameObj\Brain.cs" />
     <Compile Include="GameObj\Bullet.cs" />
+    <Compile Include="GraphicHandler.cs" />
     <Compile Include="Interfaces\ICollision.cs" />
+    <Compile Include="MainMenu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GameObj\Star.cs" />
-    <Compile Include="SplashScreen.cs" />
+    <Compile Include="TimeHandler.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
