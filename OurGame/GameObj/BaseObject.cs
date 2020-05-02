@@ -3,6 +3,8 @@ using System.Drawing;
 
 namespace OurGame
 {
+    public delegate void Message();
+
     abstract class BaseObject : ICollision
     {
         protected Graphics _graphics;

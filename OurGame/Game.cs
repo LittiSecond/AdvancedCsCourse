@@ -17,7 +17,10 @@ namespace OurGame
 
         private Bullet _bullet;
         private List<Asteroid> _asteroids;
-               
+
+        private Ship _ship; // = new Ship(GraphicHandler.Graphics, new Point(10, 400), 
+                            // new Point(5,5), new Size(12, 12));
+
         //private  bool _dataError = false;
 
         public Game()
@@ -28,6 +31,8 @@ namespace OurGame
         public void Init()
         {
             Load();
+            Ship.MessageDie += Finish;
+            Program.KeyPress += Form_KeyDown;
         }
 
         public override void On()
@@ -42,19 +47,54 @@ namespace OurGame
             base.Update();
 
             // обнаружение коллизий
-            foreach (Asteroid a in _asteroids)
+            for (int i = _asteroids.Count - 1; i >= 0; i--)
             {
+                Asteroid a = _asteroids[i];
                 if (a == null) continue;
                 
-                if (a.Collision(_bullet))
+                if (_bullet != null && a.Collision(_bullet))
                 {
                     System.Media.SystemSounds.Hand.Play();
 
-                    _bullet.Hitting();  
-                    a.Damaged();
+                    DestroyAsteroid(a);
+                    DeleteBullet();
+                    continue;
                 }
+
+                if (_ship == null)
+                    continue;
+
+                if (!_ship.Collision(a))
+                    continue;
+                Random rnd = new Random();
+                _ship.EnergyLow(rnd.Next(1, 10));
+                System.Media.SystemSounds.Asterisk.Play();
+                if (_ship.Energy <= 0)
+                    _ship.Die();
+
             }
 
+
+
+        }
+
+        public override void Draw()
+        {
+            if (!_enabled) return;
+            base.Draw();
+
+            if (_ship != null)
+            {
+                GraphicHandler.Graphics.DrawString("Энэргы: " + _ship.Energy.ToString(),
+                    SystemFonts.DefaultFont, Brushes.White, 0, 0);
+            }
+        }
+
+        private void Finish()
+        {
+            _enabled = false;
+            GraphicHandler.Graphics.DrawString("The End", new Font(FontFamily.GenericSansSerif, 60,
+                FontStyle.Underline), Brushes.White, 200, 100);
         }
 
         private void Load()
@@ -63,8 +103,7 @@ namespace OurGame
             int height = GraphicHandler.Height;
             try
             {
-                _bullet = new Bullet(g, new Point(0, 200), new Point(5, 0), new Size(4, 1));
-                _objectsFullList.Add(_bullet);
+                CrateBullet(new Point(0, 200));
 
                 Random rnd = new Random();
 
@@ -89,13 +128,50 @@ namespace OurGame
                         new Point(-10, 0), new Size(20, 20));
                 _asteroids.Add(a2);
                 _objectsFullList.Add(a2);
+
+                _ship = new Ship(GraphicHandler.Graphics, new Point(10, 400),
+                            new Point(5,5), new Size(12, 12));
+                _objectsFullList.Add(_ship);
             }
             catch (GameObjectException goe)
             {
                 //_dataError = true;
                 MessageBox.Show(goe.Message);
+                throw;
             }
+        }
 
+        private void CrateBullet(Point position)
+        {
+            _bullet = new Bullet(GraphicHandler.Graphics, position, new Point(5, 0), new Size(4, 1));
+            _objectsFullList.Add(_bullet);
+        }
+
+        private void DeleteBullet()
+        {
+            if (_bullet != null)
+            {
+                _objectsFullList.Remove(_bullet);
+                _bullet = null;
+            }
+        }
+
+        private void DestroyAsteroid(Asteroid a)
+        {
+            if (a == null) return;
+            _objectsFullList.Remove(a);
+            _asteroids.Remove(a);
+        }
+
+        private void Form_KeyDown(Keys keyCode)
+        {
+            if (keyCode == Keys.ControlKey)
+            {
+                DeleteBullet();
+                CrateBullet(new Point(_ship.Rect.X + 10, _ship.Rect.Y + 4));
+            }
+            if (keyCode == Keys.Up) _ship.Up();
+            if (keyCode == Keys.Down) _ship.Down();
         }
 
     }

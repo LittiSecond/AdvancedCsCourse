@@ -36,7 +36,7 @@ namespace OurGame
         /// <summary> астеройд получил урон </summary>
         public void Damaged()
         {
-            _pos.X = GraphicHandler.Width;      // по заданию 3
+            _pos.X = GraphicHandler.Width;     
         }
 
             // задумался, а не создать ли класс - менеджер ресурсов, чтобы 

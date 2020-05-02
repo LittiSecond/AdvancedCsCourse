@@ -29,7 +29,7 @@ namespace OurGame
         /// <summary> Пуля попала в цель </summary>
         public void Hitting()
         {
-            _pos.X = 0;   // по заданию 3
+            _pos.X = 0;   
         }
 
     }

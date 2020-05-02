@@ -52,10 +52,12 @@ namespace OurGame
 
         private void MainGameForm_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char)27)
-            {
-                Program.EndGame();
-            }
+           
+        }
+
+        private void MainGameForm_KeyDown(object sender, KeyEventArgs e)
+        {
+             Program.MainGameForm_KeyPress(e);            
         }
     }
 }

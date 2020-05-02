@@ -59,6 +59,7 @@
     <Compile Include="Game.cs" />
     <Compile Include="GameObj\Brain.cs" />
     <Compile Include="GameObj\Bullet.cs" />
+    <Compile Include="GameObj\Ship.cs" />
     <Compile Include="GraphicHandler.cs" />
     <Compile Include="Interfaces\ICollision.cs" />
     <Compile Include="MainMenu.cs" />

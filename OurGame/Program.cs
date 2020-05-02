@@ -8,6 +8,8 @@ namespace OurGame
         private static Game _game;
         private static MainMenu _menu;
 
+        public static event Action<Keys> KeyPress;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -66,7 +68,7 @@ namespace OurGame
             Application.Exit();
         }
 
-        static public void EndGame()
+        static private void EndGame()
         {
             TimeHandler.Off();
             _game.Off();
@@ -74,6 +76,22 @@ namespace OurGame
             TimeHandler.On(_menu);
         }
 
+        static public void MainGameForm_KeyPress(KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Escape:
+                    EndGame();
+                    break;
+                default:
+                    //KeyPress(e);
+                    KeyPress?.Invoke(e.KeyCode);
+                    break;
+            }
+
+
+        }
+        
 
     }
 }
