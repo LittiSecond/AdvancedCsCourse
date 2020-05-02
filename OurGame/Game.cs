@@ -23,6 +23,8 @@ namespace OurGame
 
         private EnergyGlobe _energyGlobe;
 
+        private int _score;
+
         //private  bool _dataError = false;
 
         public event Message GameOver;
@@ -98,6 +100,10 @@ namespace OurGame
                 GraphicHandler.Graphics.DrawString("Энэргы: " + _ship.Energy.ToString(),
                     SystemFonts.DefaultFont, Brushes.White, 0, 0);
             }
+
+            GraphicHandler.Graphics.DrawString("Скорэ: " + _score.ToString(),
+                SystemFonts.DefaultFont, Brushes.White, 0, 20);
+
         }
 
         private void Finish()
@@ -132,6 +138,7 @@ namespace OurGame
                         new Point(-i, 0), new Size(r, r));
                     _asteroids.Add(a);
                     _objectsFullList.Add(a);
+                    _score += 1;
                 }
 
                 // чтобы гарантированно один астеройд был на линии пули
