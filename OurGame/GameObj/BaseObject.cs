@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace OurGame
 {
-    public delegate void Message();
+    //public delegate void Message();
 
     abstract class BaseObject : ICollision
     {

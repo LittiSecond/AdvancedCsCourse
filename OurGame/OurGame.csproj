@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseBehaviour.cs" />
+    <Compile Include="Deligates\Deligates.cs" />
     <Compile Include="GameObjectException.cs" />
     <Compile Include="GameObj\Asteroid.cs" />
     <Compile Include="GameObj\BaseObject.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Game.cs" />
     <Compile Include="GameObj\Brain.cs" />
     <Compile Include="GameObj\Bullet.cs" />
+    <Compile Include="GameObj\EnergyGlobe.cs" />
     <Compile Include="GameObj\Ship.cs" />
     <Compile Include="GraphicHandler.cs" />
     <Compile Include="Interfaces\ICollision.cs" />

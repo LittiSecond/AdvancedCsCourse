@@ -21,7 +21,11 @@ namespace OurGame
         private Ship _ship; // = new Ship(GraphicHandler.Graphics, new Point(10, 400), 
                             // new Point(5,5), new Size(12, 12));
 
+        private EnergyGlobe _energyGlobe;
+
         //private  bool _dataError = false;
+
+        public event Message GameOver;
 
         public Game()
         {
@@ -46,7 +50,7 @@ namespace OurGame
             if (!_enabled) return;
             base.Update();
 
-            // обнаружение коллизий
+            // обнаружение коллизий астероидов
             for (int i = _asteroids.Count - 1; i >= 0; i--)
             {
                 Asteroid a = _asteroids[i];
@@ -74,7 +78,13 @@ namespace OurGame
 
             }
 
-
+            // столкновение с энергичическим шаром 
+            if ( _ship != null && _ship.Collision(_energyGlobe))
+            {
+                System.Media.SystemSounds.Beep.Play();
+                _ship.EnergyUp(_energyGlobe.Power);
+                _energyGlobe.Reset();
+            }
 
         }
 
@@ -95,6 +105,7 @@ namespace OurGame
             _enabled = false;
             GraphicHandler.Graphics.DrawString("The End", new Font(FontFamily.GenericSansSerif, 60,
                 FontStyle.Underline), Brushes.White, 200, 100);
+            GameOver?.Invoke();
         }
 
         private void Load()
@@ -129,9 +140,16 @@ namespace OurGame
                 _asteroids.Add(a2);
                 _objectsFullList.Add(a2);
 
-                _ship = new Ship(GraphicHandler.Graphics, new Point(10, 400),
+
+                _ship = new Ship(g, new Point(10, 400),
                             new Point(5,5), new Size(12, 12));
                 _objectsFullList.Add(_ship);
+
+
+                _energyGlobe = new EnergyGlobe(g, new Point(1000, rnd.Next(0, height - 50)),
+                        new Point(-10, 0));
+                _objectsFullList.Add(_energyGlobe);
+
             }
             catch (GameObjectException goe)
             {

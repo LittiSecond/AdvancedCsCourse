@@ -10,8 +10,8 @@ namespace OurGame
 {
     class Ship : BaseObject
     {
-
-        private int _energy = 100;
+        private const int MAX_ENERGY = 100;
+        private int _energy;
         public int Energy => _energy;
 
         public static event Message MessageDie;
@@ -19,12 +19,21 @@ namespace OurGame
         public Ship (Graphics g, Point pos, Point dir, Size size) :
             base(g, pos, dir, size)
         {
-
+            _energy = MAX_ENERGY;
         }
 
         public void EnergyLow(int n)
         {
             _energy -= n;
+        }
+
+        public void EnergyUp(int n)
+        {
+            _energy += n;
+            if (_energy > MAX_ENERGY)
+            {
+                _energy = MAX_ENERGY;
+            }
         }
 
         public override void Draw()

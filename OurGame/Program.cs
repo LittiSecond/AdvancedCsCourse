@@ -35,6 +35,7 @@ namespace OurGame
                 _menu = new MainMenu();
                 _menu.Init(form);
                 _game = new Game();
+                _game.GameOver += GameOver;
                 _game.Init();
                 _game.Off();
                 _menu.On();
@@ -66,6 +67,11 @@ namespace OurGame
         static public void ExitProgramm()
         {
             Application.Exit();
+        }
+
+        private static void GameOver()
+        {
+            TimeHandler.Off();
         }
 
         static private void EndGame()
