@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
@@ -64,6 +64,7 @@ namespace OurGame
 
                     DestroyAsteroid(a);
                     DeleteBullet();
+                    _score += 1;
                     continue;
                 }
 
@@ -138,7 +139,6 @@ namespace OurGame
                         new Point(-i, 0), new Size(r, r));
                     _asteroids.Add(a);
                     _objectsFullList.Add(a);
-                    _score += 1;
                 }
 
                 // чтобы гарантированно один астеройд был на линии пули
