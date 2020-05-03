@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
@@ -12,11 +12,13 @@ namespace OurGame
     {
         private static int STARS_QUANTITY = 30;
         private static int ASTEROIDS_QUANTITY = 20;
+        private static int FIRE_INTERVAL = 10;  //интервал между выстрелами в тактах
 
         private static Color _bgColor = Color.Black;
-
-        private Bullet _bullet;
+        
         private List<Asteroid> _asteroids;
+        private List<Bullet> _bullets;
+        private int _fireTimer;      // подсчёт тактов с прошлого выстрела
 
         private Ship _ship; // = new Ship(GraphicHandler.Graphics, new Point(10, 400), 
                             // new Point(5,5), new Size(12, 12));
@@ -32,6 +34,7 @@ namespace OurGame
         public Game()
         {
             _asteroids = new List<Asteroid>();
+            _bullets = new List<Bullet>();
         }
 
         public void Init()
@@ -57,16 +60,26 @@ namespace OurGame
             {
                 Asteroid a = _asteroids[i];
                 if (a == null) continue;
-                
-                if (_bullet != null && a.Collision(_bullet))
-                {
-                    System.Media.SystemSounds.Hand.Play();
+                bool isCollision = false;
 
-                    DestroyAsteroid(a);
-                    DeleteBullet();
-                    _score += 1;
-                    continue;
+                for (int j = _bullets.Count - 1; j >= 0; j--)
+                {
+                    Bullet b = _bullets[j];
+                    if (b == null) continue;                   
+
+                    if (a.Collision(b))
+                    {
+                        System.Media.SystemSounds.Hand.Play();
+
+                        DestroyAsteroid(a);
+                        DeleteBullet(b);
+                        _score += 1;
+                        isCollision = true;
+                        break;
+                    }
                 }
+
+                if (isCollision) continue;
 
                 if (_ship == null)
                     continue;
@@ -89,6 +102,7 @@ namespace OurGame
                 _energyGlobe.Reset();
             }
 
+            _fireTimer++;
         }
 
         public override void Draw()
@@ -121,7 +135,7 @@ namespace OurGame
             int height = GraphicHandler.Height;
             try
             {
-                CrateBullet(new Point(0, 200));
+                //CrateBullet(new Point(0, 200));
 
                 Random rnd = new Random();
 
@@ -138,7 +152,7 @@ namespace OurGame
                     Asteroid a = new Asteroid(g, new Point(1000, rnd.Next(0, height - r)),
                         new Point(-i, 0), new Size(r, r));
                     _asteroids.Add(a);
-                    _objectsFullList.Add(a);
+                    _objectsFullList.Add(a);                    
                 }
 
                 // чтобы гарантированно один астеройд был на линии пули
@@ -149,7 +163,7 @@ namespace OurGame
 
 
                 _ship = new Ship(g, new Point(10, 400),
-                            new Point(5,5), new Size(12, 12));
+                            new Point(10,5), new Size(12, 12));
                 _objectsFullList.Add(_ship);
 
 
@@ -168,16 +182,17 @@ namespace OurGame
 
         private void CrateBullet(Point position)
         {
-            _bullet = new Bullet(GraphicHandler.Graphics, position, new Point(5, 0), new Size(4, 1));
-            _objectsFullList.Add(_bullet);
+            Bullet b = new Bullet(GraphicHandler.Graphics, position, new Point(10, 0), new Size(4, 1));
+            _bullets.Add(b);
+            _objectsFullList.Add(b);
         }
 
-        private void DeleteBullet()
+        private void DeleteBullet(Bullet b)
         {
-            if (_bullet != null)
+            if (b != null)
             {
-                _objectsFullList.Remove(_bullet);
-                _bullet = null;
+                _objectsFullList.Remove(b);
+                _bullets.Remove(b);
             }
         }
 
@@ -192,8 +207,11 @@ namespace OurGame
         {
             if (keyCode == Keys.ControlKey)
             {
-                DeleteBullet();
-                CrateBullet(new Point(_ship.Rect.X + 10, _ship.Rect.Y + 4));
+                if (_fireTimer >= FIRE_INTERVAL)
+                {
+                    CrateBullet(new Point(_ship.Rect.X + 10, _ship.Rect.Y + 4));
+                    _fireTimer = 0;
+                }
             }
             if (keyCode == Keys.Up) _ship.Up();
             if (keyCode == Keys.Down) _ship.Down();
