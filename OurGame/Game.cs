@@ -13,6 +13,8 @@ namespace OurGame
         private static int STARS_QUANTITY = 30;
         private static int ASTEROIDS_QUANTITY = 20;
         private static int FIRE_INTERVAL = 10;  //интервал между выстрелами в тактах
+        private static int MIN_ASTEROID_DAMAG = 5;
+        private static int MAX_ASTEROID_DAMAG = 50;
 
         private static Color _bgColor = Color.Black;
         
@@ -48,6 +50,7 @@ namespace OurGame
         {
             base.On();
             GraphicHandler.BackgroundColor = _bgColor;
+            Log("Начало игры.");
         }
 
         public override void Update()
@@ -87,7 +90,9 @@ namespace OurGame
                 if (!_ship.Collision(a))
                     continue;
                 Random rnd = new Random();
-                _ship.EnergyLow(rnd.Next(1, 10));
+                int damag = rnd.Next(MIN_ASTEROID_DAMAG, MAX_ASTEROID_DAMAG);
+                _ship.EnergyLow(damag);
+                Log("По кораблю нанесён урон = " + damag.ToString());
                 System.Media.SystemSounds.Asterisk.Play();
                 if (_ship.Energy <= 0)
                     _ship.Die();
@@ -98,8 +103,10 @@ namespace OurGame
             if ( _ship != null && _ship.Collision(_energyGlobe))
             {
                 System.Media.SystemSounds.Beep.Play();
-                _ship.EnergyUp(_energyGlobe.Power);
+                int energ = _energyGlobe.Power;
+                _ship.EnergyUp(energ);
                 _energyGlobe.Reset();
+                Log("Получено энергии = " + energ.ToString());
             }
 
             _fireTimer++;
@@ -126,6 +133,7 @@ namespace OurGame
             _enabled = false;
             GraphicHandler.Graphics.DrawString("The End", new Font(FontFamily.GenericSansSerif, 60,
                 FontStyle.Underline), Brushes.White, 200, 100);
+            Log("Корабль уничтожен. Игра закончена со счётом = " +_score.ToString());
             GameOver?.Invoke();
         }
 
@@ -176,6 +184,7 @@ namespace OurGame
             {
                 //_dataError = true;
                 MessageBox.Show(goe.Message);
+                Log(goe.Message);
                 throw;
             }
         }
@@ -201,6 +210,7 @@ namespace OurGame
             if (a == null) return;
             _objectsFullList.Remove(a);
             _asteroids.Remove(a);
+            Log("Астеройд уничтожен");
         }
 
         private void Form_KeyDown(Keys keyCode)
@@ -211,11 +221,13 @@ namespace OurGame
                 {
                     CrateBullet(new Point(_ship.Rect.X + 10, _ship.Rect.Y + 4));
                     _fireTimer = 0;
+                    Log("Выстрел");
                 }
             }
             if (keyCode == Keys.Up) _ship.Up();
             if (keyCode == Keys.Down) _ship.Down();
         }
+
 
     }
 }

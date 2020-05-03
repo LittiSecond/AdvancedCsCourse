@@ -7,6 +7,7 @@ namespace OurGame
     {
         private static Game _game;
         private static MainMenu _menu;
+        private static FileLog _logger;
 
         public static event Action<Keys> KeyPress;
 
@@ -19,7 +20,7 @@ namespace OurGame
             //Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
 
-
+            _logger = new FileLog("log.txt");
 
             MainGameForm form = new MainGameForm
             {
@@ -33,8 +34,10 @@ namespace OurGame
             {
                 GraphicHandler.Init(form);
                 _menu = new MainMenu();
+                _menu.LogDeligate += _logger.Log;
                 _menu.Init(form);
                 _game = new Game();
+                _game.LogDeligate += _logger.Log;
                 _game.GameOver += GameOver;
                 _game.Init();
                 _game.Off();
@@ -45,6 +48,7 @@ namespace OurGame
             catch (ArgumentOutOfRangeException e)
             {
                 string mess = "Получено исключение ArgumentOutOfRangeException: " + e.Message;
+                _logger.Log(mess);
                 MessageBox.Show(mess);
             }
 

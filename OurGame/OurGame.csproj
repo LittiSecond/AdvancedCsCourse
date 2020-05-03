@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="BaseBehaviour.cs" />
     <Compile Include="Deligates\Deligates.cs" />
+    <Compile Include="FileLog.cs" />
     <Compile Include="GameObjectException.cs" />
     <Compile Include="GameObj\Asteroid.cs" />
     <Compile Include="GameObj\BaseObject.cs" />

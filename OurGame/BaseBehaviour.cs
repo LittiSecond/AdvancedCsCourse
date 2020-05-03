@@ -16,6 +16,8 @@ namespace OurGame
 
         protected bool _enabled = false;
 
+        public SendMessage LogDeligate;
+
         public BaseBehaviour()
         {
             _objectsFullList = new List<BaseObject>();            
@@ -52,6 +54,13 @@ namespace OurGame
         public virtual void Off()
         {
             _enabled = false;
+        }
+
+        protected void Log(string message)
+        {
+            if (message == null) return;
+            if (message.Length == 0) return;
+            LogDeligate?.Invoke(message);
         }
     }
 
