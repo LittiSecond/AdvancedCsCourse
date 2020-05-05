@@ -58,8 +58,80 @@ namespace Task_lesson4
 
 
 
+
+
+
+            //----------------------------------------  Задание 3
+            
+            Console.WriteLine("Задание 3");
+
+            // 3. *Дан фрагмент программы:
+            Dictionary<string, int> dict = new Dictionary<string, int>()
+            {
+                {"four",4 },
+                {"two",2 },
+                { "one",1 },
+                {"three",3 },
+            };
+            var d = dict.OrderBy(delegate (KeyValuePair<string, int> pair) { return pair.Value; });
+            foreach (var pair in d)
+            {
+                Console.WriteLine("{0} - {1}", pair.Key, pair.Value);
+            }
+            //а) Свернуть обращение к OrderBy с использованием лямбда - выражения $.
+            //а. Свернуть обращение к OrderBy с использованием лямбда-выражения =>.
+            Console.WriteLine("Задание 3a");
+
+            var da = dict.OrderBy(kvp => kvp.Value);       
+            foreach (var pair in da)
+            {
+                Console.WriteLine("{0} - {1}", pair.Key, pair.Value);
+            }
+
+            //б) *Развернуть обращение к OrderBy с использованием делегата Predicate<T>.
+            //b. * Развернуть обращение к OrderBy с использованием делегата .
+
+            //DeligatT3 delT3 = new DeligatT3(MetodToDeligateT3);
+            //DeligatT3<KeyValuePair<string, int>> delT3 = new DeligatT3<KeyValuePair<string, int>>(MetodToDeligateT3);
+            Func<KeyValuePair<string, int>, int> delT3 = new Func<KeyValuePair<string, int>, int>(MetodToDeligateT3);
+
+            var db = dict.OrderBy(delT3);
+            Console.WriteLine("Задание 3b");
+            foreach (var pair in db)
+            {
+                Console.WriteLine("{0} - {1}", pair.Key, pair.Value);
+            }
+
             Console.ReadLine();
+            /*
+             * Выражение
+             * Func<KeyValuePair<string, int>, int> delT3 = new Func<KeyValuePair<string, int>, int>(MetodToDeligateT3);                     
+             *          написал наугад, заработало. Но я всё равно не понимаю, какой делигат надо в OrderBy надо засовывать, 
+             *          чтобы оно работало.
+             * 
+             * */
+
         }
+
+        /// <summary>
+        /// Делигат для задания 3  -  неудачные попытки
+        /// </summary>
+        /// <param name="kvp"></param>
+        /// <returns></returns>
+        //delegate int DeligatT3(KeyValuePair<string, int> kvp);
+        //delegate int DeligatT3<T1, T2>(<KeyValuePair<T1, T2>> t2);
+        //delegate int DeligatT3<T2>(T2 t2);
+
+        /// <summary>
+        /// Метод для передачи делигату в задании 3
+        /// </summary>
+        /// <param name="kvp"></param>
+        /// <returns></returns>
+        private static int MetodToDeligateT3(KeyValuePair<string, int> kvp)
+        {
+            return kvp.Value;
+        }
+
 
         private static Dictionary<T, int> CalculateElements<T>(List<T> ar)
         {
