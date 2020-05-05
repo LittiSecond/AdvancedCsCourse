@@ -7,6 +7,9 @@ namespace OurGame
     {
         private static Game _game;
         private static MainMenu _menu;
+        private static FileLog _logger;
+
+        public static event Action<Keys> KeyPress;
 
         /// <summary>
         /// The main entry point for the application.
@@ -17,7 +20,7 @@ namespace OurGame
             //Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
 
-
+            _logger = new FileLog("log.txt");
 
             MainGameForm form = new MainGameForm
             {
@@ -31,8 +34,11 @@ namespace OurGame
             {
                 GraphicHandler.Init(form);
                 _menu = new MainMenu();
+                _menu.LogDeligate += _logger.Log;
                 _menu.Init(form);
                 _game = new Game();
+                _game.LogDeligate += _logger.Log;
+                _game.GameOver += GameOver;
                 _game.Init();
                 _game.Off();
                 _menu.On();
@@ -42,6 +48,7 @@ namespace OurGame
             catch (ArgumentOutOfRangeException e)
             {
                 string mess = "Получено исключение ArgumentOutOfRangeException: " + e.Message;
+                _logger.Log(mess);
                 MessageBox.Show(mess);
             }
 
@@ -66,7 +73,12 @@ namespace OurGame
             Application.Exit();
         }
 
-        static public void EndGame()
+        private static void GameOver()
+        {
+            TimeHandler.Off();
+        }
+
+        static private void EndGame()
         {
             TimeHandler.Off();
             _game.Off();
@@ -74,6 +86,22 @@ namespace OurGame
             TimeHandler.On(_menu);
         }
 
+        static public void MainGameForm_KeyPress(KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Escape:
+                    EndGame();
+                    break;
+                default:
+                    //KeyPress(e);
+                    KeyPress?.Invoke(e.KeyCode);
+                    break;
+            }
+
+
+        }
+        
 
     }
 }

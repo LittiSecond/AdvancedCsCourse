@@ -40,13 +40,14 @@ namespace OurGame
             base.On();
             GraphicHandler.BackgroundColor = _formColor;
             _form?.SetSplashScreenUIVisibility(true);
-
+            Log("Главное меню включено.");
         }
 
         public override void Off()
         {
             base.Off();
             _form?.SetSplashScreenUIVisibility(false);
+            Log("Выход из главного меню.");
         }
     }
 }

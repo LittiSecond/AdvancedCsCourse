@@ -101,6 +101,7 @@
             this.KeyPreview = true;
             this.Name = "MainGameForm";
             this.Text = " ";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainGameForm_KeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MainGameForm_KeyPress);
             this.buttonsPanel.ResumeLayout(false);
             this.ResumeLayout(false);
