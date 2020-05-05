@@ -53,7 +53,7 @@ namespace OurGame
 
         public void Down()
         {
-            if (_pos.Y < GraphicHandler.Height) _pos.Y = _pos.Y + _dir.Y;
+            if (_pos.Y < GraphicHandler.Height - _size.Height) _pos.Y = _pos.Y + _dir.Y;
         }
 
         public void Die()

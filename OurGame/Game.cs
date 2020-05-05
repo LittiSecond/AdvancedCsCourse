@@ -11,7 +11,7 @@ namespace OurGame
     class Game : BaseBehaviour
     {
         private static int STARS_QUANTITY = 30;
-        private static int ASTEROIDS_QUANTITY = 20;
+        private static int ASTEROIDS_QUANTITY = 5;
         private static int FIRE_INTERVAL = 10;  //интервал между выстрелами в тактах
         private static int MIN_ASTEROID_DAMAG = 5;
         private static int MAX_ASTEROID_DAMAG = 50;
@@ -29,6 +29,7 @@ namespace OurGame
         private EnergyGlobe _energyGlobe;
 
         private int _score;
+        private int _asteroidsQuantity;
 
         //private  bool _dataError = false;
 
@@ -120,6 +121,11 @@ namespace OurGame
             _bulletsToDelete.Clear();
 
             _fireTimer++;
+
+            if (_asteroids.Count == 0)
+            {
+                GenerateAsteroids();
+            }
         }
 
         public override void Draw()
@@ -151,6 +157,7 @@ namespace OurGame
         {
             Graphics g = GraphicHandler.Graphics;
             int height = GraphicHandler.Height;
+            _asteroidsQuantity = ASTEROIDS_QUANTITY - 1;
             try
             {
                 //CrateBullet(new Point(0, 200));
@@ -163,22 +170,6 @@ namespace OurGame
                     _objectsFullList.Add(new Star(g, new Point(1000, rnd.Next(0, height)),
                         new Point(-r, r), new Size(3, 3)));
                 }
-
-                for (int i = 0; i < ASTEROIDS_QUANTITY - 1; i++)
-                {
-                    int r = rnd.Next(5, 50);
-                    Asteroid a = new Asteroid(g, new Point(1000, rnd.Next(0, height - r)),
-                        new Point(-i, 0), new Size(r, r));
-                    _asteroids.Add(a);
-                    _objectsFullList.Add(a);                    
-                }
-
-                // чтобы гарантированно один астеройд был на линии пули
-                Asteroid a2 = new Asteroid(g, new Point(1000, 198),
-                        new Point(-10, 0), new Size(20, 20));
-                _asteroids.Add(a2);
-                _objectsFullList.Add(a2);
-
 
                 _ship = new Ship(g, new Point(10, 400),
                             new Point(10,5), new Size(12, 12));
@@ -221,6 +212,32 @@ namespace OurGame
                 //_bullets.Remove(b);
                 _bulletsToDelete.Add(b);
                 b.OnDelete -= DeleteBullet;
+            }
+        }
+
+        private void GenerateAsteroids()
+        {
+            Graphics g = GraphicHandler.Graphics;
+            int height = GraphicHandler.Height;
+            int widht = GraphicHandler.Width;
+            Random rnd = new Random();
+            _asteroidsQuantity++;
+            try
+            {
+                for (int i = _asteroids.Count; i < _asteroidsQuantity; i++)
+                {
+                    int r = rnd.Next(5, 50);
+                    Asteroid a = new Asteroid(g, new Point(widht , rnd.Next(0, height - r)),
+                        new Point(-i - 5, 0), new Size(r, r));
+                    _asteroids.Add(a);
+                    _objectsFullList.Add(a);
+                }
+            }
+            catch (GameObjectException goe)
+            {
+                MessageBox.Show(goe.Message);
+                Log(goe.Message);
+                throw;
             }
         }
 
