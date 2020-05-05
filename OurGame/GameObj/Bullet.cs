@@ -6,6 +6,9 @@ namespace OurGame
 {
     class Bullet : BaseObject
     {
+
+        public event Action<Bullet> OnDelete;
+
         public Bullet(Graphics g, Point pos, Point dir, Size size) : base(g, pos, dir, size)
         {
         }
@@ -17,13 +20,11 @@ namespace OurGame
 
         public override void Update()
         {
-            _pos.X += 3;
-            //_pos.X = _pos.X + _dir.X;
-            //if (_pos.X > Game.Width)
-            //{
-            //    _pos.X = -_size.Width;
-            //    _pos.Y = (new Random()).Next(1, Game.Heigth);
-            //}
+            _pos.X += _dir.X;
+            if (_pos.X > GraphicHandler.Width)
+            {
+                OnDelete?.Invoke(this);
+            }
         }
 
         /// <summary> Пуля попала в цель </summary>

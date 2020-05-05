@@ -20,6 +20,7 @@ namespace OurGame
         
         private List<Asteroid> _asteroids;
         private List<Bullet> _bullets;
+        private List<Bullet> _bulletsToDelete;
         private int _fireTimer;      // подсчёт тактов с прошлого выстрела
 
         private Ship _ship; // = new Ship(GraphicHandler.Graphics, new Point(10, 400), 
@@ -37,6 +38,7 @@ namespace OurGame
         {
             _asteroids = new List<Asteroid>();
             _bullets = new List<Bullet>();
+            _bulletsToDelete = new List<Bullet>();
         }
 
         public void Init()
@@ -108,6 +110,14 @@ namespace OurGame
                 _energyGlobe.Reset();
                 Log("Получено энергии = " + energ.ToString());
             }
+
+            //удаление пуль
+            foreach (Bullet b in _bulletsToDelete)
+            {
+                _objectsFullList.Remove(b);
+                _bullets.Remove(b);
+            }
+            _bulletsToDelete.Clear();
 
             _fireTimer++;
         }
@@ -194,14 +204,23 @@ namespace OurGame
             Bullet b = new Bullet(GraphicHandler.Graphics, position, new Point(10, 0), new Size(4, 1));
             _bullets.Add(b);
             _objectsFullList.Add(b);
+            b.OnDelete += DeleteBullet;
         }
 
+        /// <summary>
+        /// Сложить пулю в список для удаления. Позже будет удалено.
+        /// </summary>
+        /// <param name="b"></param>
         private void DeleteBullet(Bullet b)
         {
+            // Удалить сразу нельзя из-за того, что этот метод вызывается во время 
+            // перечисления foreach по коллекции _objectsFullList
             if (b != null)
             {
-                _objectsFullList.Remove(b);
-                _bullets.Remove(b);
+                //_objectsFullList.Remove(b);
+                //_bullets.Remove(b);
+                _bulletsToDelete.Add(b);
+                b.OnDelete -= DeleteBullet;
             }
         }
 
