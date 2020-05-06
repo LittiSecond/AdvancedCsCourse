@@ -56,13 +56,32 @@ namespace Task_lesson4
             Console.WriteLine("Задание 2б");
             WriteResults(counterMyClass);
 
+            //-------------------------------------- Задание 2с
+            //2. Дана коллекция List<T>, требуется подсчитать, сколько раз каждый элемент встречается в данной коллекции:
+            //в) *используя Linq.
+            Console.WriteLine("Задание 2c");
 
+            //var awfulObscure = listMy.GroupBy(c => c.Id); 
+            //var awfulObscure = listMy.GroupBy(c => c);
+            //foreach (var t in awfulObscure)
+            //{
+            //    Console.WriteLine("Id = " + t.Key.ToString() + " count = " + t.Count().ToString());
+            //    foreach (var t2 in t)
+            //    {
+            //        Console.WriteLine("    " + t2);
+            //    }
+            //}
 
+            var awfulObscure = listMy.GroupBy(c => c).Select(g => new { Obj = g.Key, Count = g.Count() } ) ; // @_@
 
+            foreach (var t in awfulObscure)
+            {
+                Console.WriteLine("объект = " + t.Obj.ToString() + " количество = " + t.Count.ToString());                
+            }
 
 
             //----------------------------------------  Задание 3
-            
+
             Console.WriteLine("Задание 3");
 
             // 3. *Дан фрагмент программы:
