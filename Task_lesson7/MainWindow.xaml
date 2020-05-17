@@ -4,8 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Task_lesson7"
+        xmlns:localE="clr-namespace:Task_lesson7.Entities"
+        xmlns:localV="clr-namespace:Task_lesson7.VievModels"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="800">
+    <Window.Resources>
+        <localV:StaffObservable x:Key="Staff"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -39,7 +44,9 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="Отделы:" Margin="5,5" />
                     <ListBox Grid.Row="1" Grid.Column="0" Name="DepartamentList" Margin="10,0,10,10"  
-                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                             ItemsSource="{Binding DepartamentsO, Source={StaticResource Staff}}"
+                             DisplayMemberPath="Name" >
 
                     </ListBox>
                     <Grid Grid.Row="1" Grid.Column="1" Margin="0,0,5,0" >
@@ -52,21 +59,37 @@
                         </Grid.RowDefinitions>
                         <DockPanel Grid.Row="0">
                             <Label DockPanel.Dock="Left" Content="Название: "/>
-                            <TextBox Name="DepartamentName" Text=" ...отдел не выбран..." Margin="0,4" IsReadOnly="True"/>
+                            <TextBox Name="DepartamentName"  Margin="0,4" IsReadOnly="True"
+                                     Text="{Binding SelectedItem.Name, ElementName=DepartamentList}"/>
                         </DockPanel>
                         <DockPanel Grid.Row="1">
                             <Label DockPanel.Dock="Left" Content="Руководитель: "/>
-                            <TextBox Name="DepartamentChief" Text=" " Margin="0,4" IsReadOnly="True"/>
+                            <TextBox Name="DepartamentChief"  Margin="0,4" IsReadOnly="True"
+                                     Text="{Binding SelectedItem.Chief.FullName, ElementName=DepartamentList, Mode=OneWay}"/>
                         </DockPanel>
                         <DockPanel Grid.Row="2">
                             <Label DockPanel.Dock="Left" Content="Доп. инфо.: "/>
-                            <TextBox Name="DepartamentInfoTextBox" Text=" " Margin="0,4" IsReadOnly="True"/>
+                            <TextBox Name="DepartamentInfoTextBox"  Margin="0,4" IsReadOnly="True"
+                                     Text="{Binding SelectedItem.Info, ElementName=DepartamentList}"/>
                         </DockPanel>
                         <DockPanel Grid.Row="3">
                             <Label DockPanel.Dock="Left" Content="Состав отдела: "/>
                         </DockPanel>
-                        <ListBox Grid.Row="4" Name="DepartWorkersList" Margin="0,0,0,10">
-                        </ListBox>
+                        <ListView Grid.Row="4" Name="DepartWorkersList" Margin="0,0,0,10"
+                                 ItemsSource="{Binding SelectedValue.Workers, ElementName=DepartamentList}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate DataType="local2:Employee">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="Таб.№"/>
+                                        <TextBlock Text="{Binding Id}" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding FirstName}" Background="#7FBFBFBF"/>
+                                        <Label Content="{Binding SurName}"/>
+                                        <TextBlock Text="{Binding Appointment, StringFormat= - {0}}" VerticalAlignment="Center"
+                                                   FontStyle="Italic"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
                     </Grid>
 
                 </Grid>
@@ -77,8 +100,21 @@
                         <RowDefinition/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <ListView Grid.Row="0" Margin="10" >
-
+                    <ListView Grid.Row="0" Margin="10" 
+                              ItemsSource="{Binding EmployeesO, Source={StaticResource Staff}}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate DataType="local2:Employee">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Таб.№"/>
+                                    <TextBlock Text="{Binding Id}" VerticalAlignment="Center"/>
+                                    <Label Content="{Binding FirstName}" Background="#7FBFBFBF"/>
+                                    <Label Content="{Binding SurName}"/>                                    
+                                    <TextBlock Text="{Binding Departament.Name, StringFormat=Отдел: {0}}" VerticalAlignment="Center"/>                                                                       
+                                    <TextBlock Text="{Binding Appointment, StringFormat= - {0}}" VerticalAlignment="Center"
+                                                   FontStyle="Italic"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
                     </ListView>
                     <Button Grid.Row="1" Name="WorkerAboutButton" Height="28" Width="100" Content="О сотруднике" 
                             Margin="10,0,0,10" HorizontalAlignment="Left" IsEnabled="False" Click="WorkerAboutButton_Click"/>
