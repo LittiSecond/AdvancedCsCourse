@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Task_lesson7"
         mc:Ignorable="d"
+              
         Title="AboutEmployeeWindow" Height="280" Width="500">
     <Grid Margin="10">
         <Grid.Resources>
@@ -35,7 +36,8 @@
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0">
             <TextBlock Text="таб.№ " DockPanel.Dock="Left"/>
-            <TextBox DockPanel.Dock="Left" Name="IdTexBox" Width="50" HorizontalAlignment="Left" IsReadOnly="True"/>
+            <TextBox DockPanel.Dock="Left" Name="IdTexBox" Width="50" HorizontalAlignment="Left" IsReadOnly="True"
+                     Text="{Binding Path=SelectedEmployee.Id}"/>
         </DockPanel>
         <DockPanel Grid.Row="1">
             <TextBlock Name="WorkerNameText" Text="workerName "/>

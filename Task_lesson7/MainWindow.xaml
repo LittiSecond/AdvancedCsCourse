@@ -26,6 +26,7 @@
             </MenuItem>
             <MenuItem Header="Сервис">
                 <MenuItem Header="Очистить лог" Click="ClearLogMenuItem_Click"/>
+                <MenuItem Header="Проверить работу ..." Click="TestMenuItem_Click"/>
             </MenuItem>
             <MenuItem Header="Справка">
                 <MenuItem Header="О программе"/>
@@ -100,8 +101,9 @@
                         <RowDefinition/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <ListView Grid.Row="0" Margin="10" 
-                              ItemsSource="{Binding EmployeesO, Source={StaticResource Staff}}">
+                    <ListView Grid.Row="0" Margin="10" Name="FullWorkersList" SelectionChanged="FullWorkersList_SelectionChanged"
+                              ItemsSource="{Binding EmployeesO, Source={StaticResource Staff}}"
+                              SelectedItem="{Binding SelectedEmployee, Source={StaticResource Staff}, Mode=OneWayToSource}">
                         <ListView.ItemTemplate>
                             <DataTemplate DataType="local2:Employee">
                                 <StackPanel Orientation="Horizontal">
