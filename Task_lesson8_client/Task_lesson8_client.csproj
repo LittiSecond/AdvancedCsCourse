@@ -105,5 +105,11 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Task_lesson8_WcfService\Task_lesson8_WcfService.csproj">
+      <Project>{65b639ff-ba9b-4191-b44e-d48ce47cd13d}</Project>
+      <Name>Task_lesson8_WcfService</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

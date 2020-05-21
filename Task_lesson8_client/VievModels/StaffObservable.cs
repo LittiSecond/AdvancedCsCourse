@@ -7,16 +7,17 @@ using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 using System.Data;
-//using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 
 using Task_lesson7.Entities;
-
+using Task_lesson8_WcfService;
 
 namespace Task_lesson7.VievModels
 {
     class StaffObservable : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        IRemoteStaffService _service;
 
         /// <summary> делегат для отправки текстовых сообщений во внешнюю среду </summary>
         public Action<string> SendMessage;
@@ -38,6 +39,7 @@ namespace Task_lesson7.VievModels
             _departamentsO = new ObservableCollection<Departament>();
 
             StubCreateStaff();
+            _service = new RemoteStaffService();
         }
 
         public ObservableCollection<Employee> EmployeesO
@@ -60,23 +62,100 @@ namespace Task_lesson7.VievModels
 
         public void ReloadAll()
         {
-            SendMessage?.Invoke("StaffObservable->ReloadAll: ");
+            DepartamentInfo[] depArr = LoadDepartaments();
+            EmployeeInfo[] emplArr = LoadEmployees();
+            SynchronizeTables(depArr, emplArr);
 
-            //_employeesO.Clear();
-            //_departamentsO.Clear();
-
-
-
-            //OnPropertyChanged("DepartamentsO");
-            ///OnPropertyChanged("EmployeesO");
-
+            OnPropertyChanged("DepartamentsO");
+            OnPropertyChanged("EmployeesO");
         }
 
+        private DepartamentInfo[] LoadDepartaments()
+        {
+            DepartamentInfo[] depArr = _service.GetDepartaments();           
 
+            if (depArr == null)
+            {
+                SendMessage?.Invoke("StaffObservable->LoadDepartaments: Ошибка. Список отделов не получен.");
+                return null;
+            }
+            if (depArr.Length == 0)
+            {
+                SendMessage?.Invoke("StaffObservable->LoadDepartaments: Ошибка. Список отделов не получен.");
+                return null;
+            }
+            
+            _departamentsO.Clear();
 
+            foreach (DepartamentInfo depI in depArr)
+            {
+                if (depI == null)
+                {
+                    _departamentsO.Add(new Departament(-1, String.Empty));
+                    continue;
+                }
+                _departamentsO.Add(new Departament(depI.Id, depI.Name, depI.Info));
+            }
+            return depArr;
+        }
 
+        private EmployeeInfo[] LoadEmployees()
+        {
+            EmployeeInfo[] emplArr = _service.GetEmployees();
+            if (emplArr == null)
+            {
+                SendMessage?.Invoke("StaffObservable->LoadEmployees: Ошибка. Список отделов не получен.");
+                return null;
+            }
+            if (emplArr.Length == 0)
+            {
+                SendMessage?.Invoke("StaffObservable->LoadEmployees: Ошибка. Список отделов не получен.");
+                return null;
+            }
+            _employeesO.Clear();
 
+            foreach(EmployeeInfo empI in emplArr)
+            {                
+                _employeesO.Add(new Employee(empI.FirstName, empI.SurName, empI.Id)
+                {
+                    Appointment = empI.Appointment,
+                    Salary = empI.Salary,
+                    Info = empI.Info
+                });
+            }
+            return emplArr;
+        }
 
+        private void SynchronizeTables(DepartamentInfo[] depArr, EmployeeInfo[] emplArr)
+        {
+            if (depArr == null || emplArr == null)
+                return;
+            // работников по отделам
+            for (int i = 0; i < emplArr.Length; i++)
+            {
+                Employee emp = _employeesO[i];
+                int depId = emplArr[i].DepartamentId;
+                if (depId > 0)
+                {
+                    Departament dep = _departamentsO.FirstOrDefault(d => d.Id == depId);
+                    if (dep != null)
+                    {
+                        dep.AddEmployee(emp);                        
+                    }
+                }
+            }
+
+            //расстановка вождей отделов
+            for (int i = 0; i < depArr.Length; i++)
+            {
+                int empId = depArr[i].ChiefId;
+                if (empId > 0)
+                {
+                    _departamentsO[i].SetChief(empId);
+                }
+            }
+
+        }
 
         private void OnPropertyChanged(string prop)
         {
@@ -84,11 +163,9 @@ namespace Task_lesson7.VievModels
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
 
-
         public void Test1()
         {
-            SendMessage?.Invoke("StaffObservable->Test1: ");
-
+            SendMessage?.Invoke("StaffObservable->Test1: " + _service.GetDepartamentQuantity());
         }
 
 

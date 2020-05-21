@@ -128,5 +128,32 @@ namespace Task_lesson7.Entities
         }
 
 
+        public bool SetChief(int employeeId)
+        {
+            if (employeeId <= 0)
+            { return false; }
+            bool flag = false;
+            
+            //for (int i = 0; i < _workers.Count; i++)
+            //{
+            //    Employee emp = _workers[i];
+            //    if (emp.Id == employeeId)
+            //    {
+            //        Chief = emp;
+            //        flag = true;
+            //        break;
+            //    }
+            //}
+
+            Employee emp = _workers.FirstOrDefault(e => e.Id == employeeId);
+            if (emp != null)
+            {
+                    Chief = emp;
+                    flag = true;                    
+            }
+
+            return flag;
+        }
+
     }
 }

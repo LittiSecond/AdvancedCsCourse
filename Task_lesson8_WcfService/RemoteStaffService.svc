@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="Task_lesson8_WcfService.RemoteStaffService" CodeBehind="RemoteStaffService.svc.cs" %>
