@@ -1,0 +1,70 @@
+﻿<Window x:Class="Task_lesson7.AboutEmployeeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Task_lesson7"
+        mc:Ignorable="d"
+              
+        Title="AboutEmployeeWindow" Height="280" Width="500">
+    <Grid Margin="10">
+        <Grid.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="DockPanel.Dock" Value="Left"/>
+            </Style>
+            <Style TargetType="TextBox" >
+                <Setter Property="Width" Value="Auto"/>
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="Margin" Value="3,3,3,3"/>
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="DockPanel.Dock" Value="Right"/>
+                <Setter Property="Width" Value="70"/>
+                <Setter Property="Margin" Value="3,3,3,3"/>
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0">
+            <TextBlock Text="таб.№ " DockPanel.Dock="Left"/>
+            <TextBox DockPanel.Dock="Left" Name="IdTexBox" Width="50" HorizontalAlignment="Left" IsReadOnly="True"
+                     Text="{Binding Path=SelectedEmployee.Id}"/>
+        </DockPanel>
+        <DockPanel Grid.Row="1">
+            <TextBlock Name="WorkerNameText" Text="workerName "/>
+        </DockPanel>
+        <DockPanel Grid.Row="2">
+            <TextBlock Text="Должность: "/>
+            <TextBox Name="AppointTextBox" Text="t" Width="307"/>
+            <Button Content="изменить" />
+        </DockPanel>
+        <DockPanel Grid.Row="3">
+            <TextBlock Text="Отдел: "/>
+            <ComboBox Name="DepartamentComboBox" Height="24" Margin="0,4,0,3" HorizontalAlignment="Stretch" Width="341"
+                      />
+            <Button Content="изменить"/>
+        </DockPanel>
+        <DockPanel Grid.Row="4">
+            <TextBlock Text="Оклад: "/>
+            <TextBox Name="SalaryTextBox" Text="t" Width="100"/>
+            <Button Content="изменить" />
+        </DockPanel>
+        <DockPanel Grid.Row="5">
+            <TextBlock Text="Доп. инф: "/>
+            <TextBox Name="InfoTextBox" Text="tttttt" HorizontalAlignment="Stretch" Width="320"/>
+            <Button Content="изменить"/>
+        </DockPanel>
+        <DockPanel Grid.Row="6">
+            <Button Content="закрыть" Width="80" Click="Button_Click"/>
+        </DockPanel>
+    </Grid>
+</Window>
