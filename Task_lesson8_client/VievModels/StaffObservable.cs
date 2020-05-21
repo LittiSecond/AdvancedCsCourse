@@ -9,6 +9,8 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Runtime.CompilerServices;
 
+using System.ServiceModel;
+
 using Task_lesson7.Entities;
 using Task_lesson8_WcfService;
 
@@ -17,7 +19,8 @@ namespace Task_lesson7.VievModels
     class StaffObservable : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        IRemoteStaffService _service;
+        //IRemoteStaffService _service;
+        private RemoteStaffClient _service;
 
         /// <summary> делегат для отправки текстовых сообщений во внешнюю среду </summary>
         public Action<string> SendMessage;
@@ -39,7 +42,8 @@ namespace Task_lesson7.VievModels
             _departamentsO = new ObservableCollection<Departament>();
 
             StubCreateStaff();
-            _service = new RemoteStaffService();
+            //_service = new RemoteStaffService();
+            _service = new RemoteStaffClient(new BasicHttpBinding(), new EndpointAddress("http://localhost:8095/RemoteStaffService"));
         }
 
         public ObservableCollection<Employee> EmployeesO

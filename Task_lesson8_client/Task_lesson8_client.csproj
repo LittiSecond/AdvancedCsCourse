@@ -37,6 +37,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -64,6 +65,7 @@
     </Compile>
     <Compile Include="Entities\Departament.cs" />
     <Compile Include="Entities\Employee.cs" />
+    <Compile Include="RemoteStaffClient.cs" />
     <Compile Include="VievModels\StaffObservable.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -106,9 +108,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Task_lesson8_WcfService\Task_lesson8_WcfService.csproj">
-      <Project>{65b639ff-ba9b-4191-b44e-d48ce47cd13d}</Project>
-      <Name>Task_lesson8_WcfService</Name>
+    <ProjectReference Include="..\Task_lesson8_WcfServis2\Task_lesson8_WcfServis2.csproj">
+      <Project>{0f8c0984-c483-4707-9a51-82ad05dc6566}</Project>
+      <Name>Task_lesson8_WcfServis2</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
